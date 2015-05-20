@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.twitter.testStorehaus.elasticsearch
+package com.twitter.storehaus.elasticsearch
 
 import org.scalatest.{OneInstancePerTest, Matchers, WordSpec}
 import com.twitter.util.{Future, Await}
