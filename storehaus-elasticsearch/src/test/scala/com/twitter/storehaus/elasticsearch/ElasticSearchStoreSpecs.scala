@@ -34,7 +34,7 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
 
   private val person = Person("Joe", "Smith", 29)
 
-  val testStore = store
+  lazy val testStore = store
 
   "ElasticSearch Store" should {
 
