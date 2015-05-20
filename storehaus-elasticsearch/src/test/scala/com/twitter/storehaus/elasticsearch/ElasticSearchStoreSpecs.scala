@@ -35,8 +35,10 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
   private val person = Person("Joe", "Smith", 29)
 
   "ElasticSearch Store" should {
+    "Wait for elasticsearch to load indexes" in {
+      Thread.sleep(10000)
+    }
 
-    /*
     "Put a value" in {
       val key = "put_key"
       store.put((key, Some(person)))
@@ -46,7 +48,6 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
       val result = Await.result(store.get(key))
       result should equal(Some(person))
     }
-    */
 
     "Retrieve a value that doesnt exist" in {
       val key = "put_key"
