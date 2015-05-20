@@ -35,10 +35,12 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
   private val person = Person("Joe", "Smith", 29)
 
   "ElasticSearch Store" should {
+    /*
     "Wait for elasticsearch to load indexes" in {
       store
       blockAndRefreshIndex
     }
+    */
 
     "Put a value" in {
       val key = "put_key"
