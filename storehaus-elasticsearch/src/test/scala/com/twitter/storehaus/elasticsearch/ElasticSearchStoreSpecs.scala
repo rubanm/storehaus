@@ -36,7 +36,8 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
 
   "ElasticSearch Store" should {
     "Wait for elasticsearch to load indexes" in {
-      Thread.sleep(10000)
+      store
+      blockAndRefreshIndex
     }
 
     "Put a value" in {
