@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-package com.twitter.storehaus.elasticsearch
+package com.twitter.testStorehaus.elasticsearch
 
 import org.scalatest.{OneInstancePerTest, Matchers, WordSpec}
 import com.twitter.util.{Future, Await}
-import com.twitter.storehaus.FutureOps
+import com.twitter.testStorehaus.FutureOps
 import org.elasticsearch.action.search.SearchRequestBuilder
 import org.elasticsearch.index.query.QueryBuilders._
 import org.elasticsearch.index.query.FilterBuilders._
@@ -34,53 +34,49 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
 
   private val person = Person("Joe", "Smith", 29)
 
+  val testStore = store
+
   "ElasticSearch Store" should {
-    /*
-    "Wait for elasticsearch to load indexes" in {
-      store
-      blockAndRefreshIndex
-    }
-    */
 
     "Put a value" in {
       val key = "put_key"
-      store.put((key, Some(person)))
+      testStore.put((key, Some(person)))
 
       blockAndRefreshIndex
 
-      val result = Await.result(store.get(key))
+      val result = Await.result(testStore.get(key))
       result should equal(Some(person))
     }
 
     "Retrieve a value that doesnt exist" in {
       val key = "put_key"
-      store.put((key, Some(person)))
+      testStore.put((key, Some(person)))
 
       blockAndRefreshIndex
 
-      val result = Await.result(store.get("missing_key"))
+      val result = Await.result(testStore.get("missing_key"))
       result should equal(None)
     }
 
     "Update a value" in {
       val key = "update_key"
-      store.put(key, Some(person))
-      store.put(key, Some(person.copy(age = 30)))
+      testStore.put(key, Some(person))
+      testStore.put(key, Some(person.copy(age = 30)))
 
       blockAndRefreshIndex
 
-      val result = Await.result(store.get(key))
+      val result = Await.result(testStore.get(key))
       result should equal(Some(person.copy(age = 30)))
     }
 
     "Delete a value" in new DefaultElasticContext {
       val key = "delete_key"
-      store.put(key, Some(person))
-      store.put(key, None)
+      testStore.put(key, Some(person))
+      testStore.put(key, None)
 
       blockAndRefreshIndex
 
-      val result = Await.result(store.get(key))
+      val result = Await.result(testStore.get(key))
       result should equal (None)
     }
 
@@ -88,11 +84,11 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
       val key = "_put_key"
       val persons = (1 to 10).map(i => i + key -> Some(person.copy(age = i))).toMap
 
-      store.multiPut(persons)
+      testStore.multiPut(persons)
 
       blockAndRefreshIndex
 
-      val response = store.multiGet(persons.keySet)
+      val response = testStore.multiGet(persons.keySet)
       val result = Await.result(FutureOps.mapCollect(response))
       result should equal (persons)
     }
@@ -101,11 +97,11 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
       val key = "_put_key"
       val persons = (1 to 10).map(i => i + key -> Some(person.copy(age = i))).toMap
 
-      store.multiPut(persons)
+      testStore.multiPut(persons)
 
       blockAndRefreshIndex
 
-      val response = store.multiGet(Set[String]())
+      val response = testStore.multiGet(Set[String]())
       val result = Await.result(FutureOps.mapCollect(response))
       result should equal(Map[String,Future[Option[String]]]())
     }
@@ -116,11 +112,11 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
       val persons = (1 to 10).map(i => i + key -> Some(person.copy(age = i))).toMap
       val persons_updated = (1 to 10).map(i => i + key -> Some(person.copy(age = i * 2))).toMap
 
-      store.multiPut(persons)
-      store.multiPut(persons_updated)
+      testStore.multiPut(persons)
+      testStore.multiPut(persons_updated)
       blockAndRefreshIndex
 
-      val response = store.multiGet(persons_updated.keySet)
+      val response = testStore.multiGet(persons_updated.keySet)
       val result = Await.result(FutureOps.mapCollect(response))
       result should equal(persons_updated)
     }
@@ -131,11 +127,11 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
       val persons = (1 to 10).map(i => i + key -> Some(person.copy(age = i))).toMap
       val deleted_persons = (1 to 10).map(i => i + key -> None).toMap
 
-      store.multiPut(persons)
-      store.multiPut(deleted_persons)
+      testStore.multiPut(persons)
+      testStore.multiPut(deleted_persons)
       blockAndRefreshIndex
 
-      val response = store.multiGet(deleted_persons.keySet)
+      val response = testStore.multiGet(deleted_persons.keySet)
       val result = Await.result(FutureOps.mapCollect(response))
       result should equal(deleted_persons)
     }
