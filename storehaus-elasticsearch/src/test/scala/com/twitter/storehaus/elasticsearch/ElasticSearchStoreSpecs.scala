@@ -36,6 +36,7 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
 
   "ElasticSearch Store" should {
 
+    /*
     "Put a value" in {
       val key = "put_key"
       store.put((key, Some(person)))
@@ -45,6 +46,7 @@ class ElasticSearchStoreSpecs extends WordSpec with Matchers with OneInstancePer
       val result = Await.result(store.get(key))
       result should equal(Some(person))
     }
+    */
 
     "Retrieve a value that doesnt exist" in {
       val key = "put_key"
