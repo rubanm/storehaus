@@ -18,7 +18,7 @@ package com.twitter.testStorehaus.elasticsearch
 
 import org.scalatest.{OneInstancePerTest, Matchers, WordSpec}
 import com.twitter.util.{Future, Await}
-import com.twitter.testStorehaus.FutureOps
+import com.twitter.storehaus.FutureOps
 import org.elasticsearch.action.search.SearchRequestBuilder
 import org.elasticsearch.index.query.QueryBuilders._
 import org.elasticsearch.index.query.FilterBuilders._
